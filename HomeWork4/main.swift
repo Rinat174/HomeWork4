@@ -41,69 +41,59 @@ enum TypeCar {
 
 
 
-class Car {
+protocol Car {
     
+    var Mark: String {get set}
+    var Year: Int   {get set}
+    var openWindows: Bool {get set}
+    var engineOn: Bool {get set}
+    var typeCar: TypeCar  {get set}
+    var engineType: EngineType {get set}
+    
+
+
+    func getEngineStatus () -> String
+    func getWindowsStatus () -> String
+    func actionCar (action: ActionCars)
+  
+    
+    }
+
+
+
+class SportCar : Car, CustomStringConvertible {
+
+
     var Mark: String
     var Year: Int
     var openWindows: Bool
     var engineOn: Bool
     var typeCar: TypeCar
     var engineType: EngineType
-    
-    init ()  {
-        self.Mark = ""
-        self.Year = 0
-        self.typeCar = .Passenger
-        self.engineType = .Gasoline
-        self.engineOn = false
-        self.openWindows = false
-    }
-    
-    
-    func getEngineStatus () -> String
-    {
-        if (engineOn == true) {
-            return "Двигатель запущен"
-            
-        }
-        else{
-            return "Двигатель остановлен"
-        }
-    }
-    func getWindowsStatus () -> String {
-        if openWindows == true {
-            return "Окна открыты"
-            
-        } else {
-            return "Окна закрыты"
-        }
-        
-    }
-    func actionCar (action: ActionCars) {
-         
-    }
-    
-     func toString () {
-        print ("Марка \(Mark) Год выпуска \(Year) тип автомобиля \(typeCar)  тип двигателя \(engineType)" )
-    }
-    }
-
-
-
-class SportCar : Car {
-  
-   
     var accelaration: Double
     var horsePower: Int
     var sportMode: Bool
     
     
-    override init () {
+     init () {
+        Mark = ""
+        Year = 0
+        openWindows = false
+        engineOn = false
+        accelaration = 0
         accelaration  = 0.0
+        typeCar = .Passenger
         horsePower = 0
         sportMode = false
+        engineType = .Gasoline
     }
-    override func actionCar(action: ActionCars) {
+    
+    var description: String {
+        return  "Легковой автомобиль модель \(Mark) + количество л.с \(horsePower) разгон до 100 км \(accelaration)"
+    }
+    
+    
+     func actionCar(action: ActionCars) {
         switch action{
         case .engineON: self.engineOn = true
             print("Двигатель запущен")
@@ -120,12 +110,25 @@ class SportCar : Car {
         default: break
     }
     }
-    
-    override func toString () {
-    
-        print ("Легковой автомобиль модель \(Mark) + количество л.с \(horsePower) разгон до 100 км \(accelaration)")
-        
+    func getEngineStatus() -> String {
+        if engineOn == true {
+            
+            return "Двигатель спорткара запущен"
+            
+        } else {
+            return "Двигатель спорткара остановлен"
+        }
     }
+    func getWindowsStatus() -> String {
+        if openWindows == true {
+            return "Окна спорткара открыты"
+        }
+        else {
+            print("Окна спорткара закрыты")
+            return "Окна спорткара закрыты"
+        }
+    }
+  
 
 }
     
@@ -133,15 +136,37 @@ class SportCar : Car {
 
 
     
-class TrunkCar: Car {
+class TrunkCar: Car, CustomStringConvertible {
+ 
 
+    
+    var Mark: String
+    var Year: Int
+    var openWindows: Bool
+    var engineOn: Bool
+    var typeCar: TypeCar
+    var engineType: EngineType
+    var accelaration: Double
+    var horsePower: Int
     var bagageVolume: Int
     var trailerOn: Bool
     
-   
-    override init () {
-        bagageVolume = 0
+    init() {
+        Year = 0
         trailerOn = false
+        horsePower = 0
+        Mark = ""
+        openWindows = false
+        engineOn = false
+        typeCar = .Truck
+        engineType = .Diesel
+        accelaration = 0
+        horsePower = 0
+        bagageVolume = 0
+    
+        
+        
+        
     }
     
     func getBagadgeVolume () -> Int {
@@ -150,7 +175,7 @@ class TrunkCar: Car {
     }
     
     
-    override func actionCar (action: ActionCars) {
+     func actionCar (action: ActionCars) {
         switch action{
         case .engineON: self.engineOn = true
             print("Двигатель запущен")
@@ -174,15 +199,35 @@ class TrunkCar: Car {
                         
         }
     }
-    override func toString (){
-        print ("Грузовой автобиль: \(Mark) год выпуска: \(Year) +  \(getEngineStatus())  \(getWindowsStatus())  погружено \(getBagadgeVolume()) кг. груза")
+    
+    func getEngineStatus() -> String {
+        if engineOn == true {
+            return "Двигатель грузовика запущен"
+            
+        } else {
+            return "Двигатель грузовика остановлен"
+        }
+    }
+    func getWindowsStatus() -> String {
+        if openWindows == true {
+            return "Окна грузовика открыты"
+        }
+        else {
+            return "Окна грузовика закрыты"
+        }
+    }
+    
+    var description: String {
+        return ("Грузовой автобиль: \(Mark) год выпуска: \(Year) +  \(getEngineStatus())  \(getWindowsStatus())  погружено \(getBagadgeVolume()) кг. груза")
+        
+        
     }
 }
 
 
 
 
-        let audi  = SportCar()
+ let audi  = SportCar()
 audi.Mark = "Audi Q8"
 audi.Year =  2018
 audi.horsePower = 249
@@ -191,15 +236,15 @@ audi.typeCar = .Passenger
 audi.engineType = .Diesel
 
 audi.actionCar(action: .engineON)
-audi.toString()
+print (audi.description)
 audi.actionCar(action: .engineOFF)
-audi.toString()
+print (audi.description)
 
 
 audi.actionCar(action: .openWindows)
-audi.toString()
+print (audi.description)
 audi.actionCar(action: .closeWindows)
-audi.toString()
+print (audi.description)
 
 let bmw =  SportCar()
 bmw.Year = 2022
@@ -210,12 +255,12 @@ bmw.accelaration = 3.2
 
 
 bmw.actionCar(action: .sportModeOn)
-bmw.toString()
+print (bmw.description)
 bmw.actionCar(action: .openWindows)
 
 bmw.actionCar(action: .sportModeOff)
 
-bmw.toString()
+print (bmw.description)
 
 
 let man  = TrunkCar()
@@ -224,43 +269,43 @@ man.Year =  1999
 
 
 man.actionCar(action: .engineON)
-man.toString()
+print (bmw.description)
 man.actionCar(action: .engineOFF)
-man.toString()
+print (bmw.description)
 
 
 man.actionCar(action: .openWindows)
 
-man.toString()
+print (bmw.description)
 man.actionCar(action: .closeWindows)
-man.toString()
+print (bmw.description)
 
 
 
 man.actionCar(action: .loadLuggage(volume: 10000))
 
-man.toString()
+print (bmw.description)
 
 man.actionCar(action: .unloadLuggage(volume: 5999))
-man.toString()
+print (bmw.description)
 
 let volvo  = TrunkCar()
 volvo.Mark = "Volvo"
 volvo.engineType = .Diesel
 volvo.actionCar(action: .engineON)
 
-volvo.toString()
+print (volvo.description)
 volvo.actionCar(action: .atacheTrailer)
 
-volvo.toString()
+print (volvo.description)
 
 volvo.actionCar(action: .unhokTrailer)
 
 
 volvo.actionCar(action: .loadLuggage(volume: 5000))
-volvo.toString()
+print (volvo.description)
 
 volvo.actionCar(action: .unloadLuggage(volume: 2000))
-volvo.toString()
+print (volvo.description)
 
 
